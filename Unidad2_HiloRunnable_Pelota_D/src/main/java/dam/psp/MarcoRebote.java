@@ -39,6 +39,7 @@ class MarcoRebote extends JFrame {
         detener = new JButton("Detener");
         //ComboBox con los hilos creados
         listadoCombo = new JComboBox();
+        listadoCombo.setPreferredSize(detener.getPreferredSize());
 
         detener.addActionListener(new ActionListener() {
             @Override

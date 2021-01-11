@@ -1,4 +1,4 @@
-package dam.di;
+package dam.psp;
 
 public class SincronizandoHilos {
 

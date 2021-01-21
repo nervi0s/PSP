@@ -32,12 +32,14 @@ public class ColaDeposito {
             } catch (InterruptedException ex) {
                 //Logger.getLogger(ColaDeposito.class.getName()).log(Level.SEVERE, null, ex);
             }
-            disponible = false;
-            notifyAll();
-            return this.numero;
+            //disponible = false;
+            //notifyAll();
+            //return this.numero;
         }
-
-        return -1;
+        disponible = false;
+        notify();
+        return this.numero;
+        //return -1; //No haría falta
     }
 
 }

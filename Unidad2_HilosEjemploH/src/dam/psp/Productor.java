@@ -18,9 +18,9 @@ public class Productor extends Thread {
     public void run() {
         System.out.println("Productor: " + Thread.currentThread());
         for (int i = 0; i < 5; i++) {
-            deposito.put(i);
             System.out.println("Iteración " + i + " del productor con ID: " + id
                     + ". Produce: " + i);
+            deposito.put(i);// Cambio de lugar para que los mensajes sean correctos por la consola
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {

@@ -20,7 +20,7 @@ public class Demo_URLConnection {
             connection = url.openConnection();
 
             InputStream is = connection.getInputStream();
-
+            System.out.println(connection.getContentType());
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             //BufferedInputStream bis = new BufferedInputStream(is);
             String inputLine;

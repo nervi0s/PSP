@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Demo_07_ServidorSocket_UDP2 {
 
@@ -41,7 +39,7 @@ public class Demo_07_ServidorSocket_UDP2 {
         } catch (SocketException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
-            Logger.getLogger(Demo_07_ServidorSocket_UDP2.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 

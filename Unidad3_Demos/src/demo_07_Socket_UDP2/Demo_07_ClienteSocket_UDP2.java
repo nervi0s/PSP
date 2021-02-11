@@ -7,26 +7,30 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Demo_07_ClienteSocket_UDP2 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         try {
-            InetAddress ipDestino = InetAddress.getByName("localhost");
-            int puertoDestino = 50000;
+            InetAddress ipDestino = InetAddress.getByName("10.0.3.210"); //Datos del servidor
+            //InetAddress ipDestino = InetAddress.getByName("localhost"); //Datos del servidor
+            int puertoDestino = 50000; //Datos del servidor
 
-            byte[] mensaje;
+            byte[] mensajeEnBytes;
 
             System.out.print("Introduce mensaje: ");
             String mensajeParaServer = sc.nextLine();
 
-            mensaje = mensajeParaServer.getBytes();
+            mensajeEnBytes = mensajeParaServer.getBytes();
 
+            /*
+            |----------------------------------------------|--------------------------|-------------|----------------|
+            | cadena de bytes contenido del mensaje  |  longitud del mensaje  |  IP destino | Pto destino    |
+            |----------------------------------------------|--------------------------|-------------|----------------|
+             */
             //Construímos el DatagramPacket
-            DatagramPacket datagramaAEnviar = new DatagramPacket(mensaje, mensaje.length, ipDestino, puertoDestino);
+            DatagramPacket datagramaAEnviar = new DatagramPacket(mensajeEnBytes, mensajeEnBytes.length, ipDestino, puertoDestino);
 
             //Creamos en DatagramSocket
             DatagramSocket socketLadoCliente = new DatagramSocket();
@@ -47,9 +51,9 @@ public class Demo_07_ClienteSocket_UDP2 {
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
         } catch (SocketException ex) {
-            Logger.getLogger(Demo_07_ClienteSocket_UDP2.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
-            Logger.getLogger(Demo_07_ClienteSocket_UDP2.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 }

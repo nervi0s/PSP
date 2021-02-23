@@ -12,60 +12,53 @@ import java.util.logging.Logger;
 
 public class Cliente {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String host = "localhost";
         int port = 50000;
         Scanner sc = new Scanner(System.in);
-        String condicion = "";
 
-        Socket socketLadoCliente = null;
-        OutputStream os = null;
-        ObjectOutputStream objetoSalida = null;
-        InputStream is = null;
-        ObjectInputStream objetoEntrada = null;
-        socketLadoCliente = new Socket(host, port);
+        System.out.println("Programa cliente iniciado...");
         try {
-            while (!condicion.equals("*")) {
+            //Obtenemos los datos para crear el objeto
+            Socket socketLadoCliente = new Socket(host, port);
+            System.out.print("Introdice tu País:");
+            String pais = sc.nextLine();
+            System.out.print("Introdice tu Ciudad:");
+            String ciudad = sc.nextLine();
+            System.out.print("Introdice tu Saludo:");
+            String saludo = sc.nextLine();
 
-                System.out.println("Programa Cliente Inciado...");
-                System.out.print("Introduce tu País: ");
-                String pais = sc.nextLine();
-                condicion = pais;
-                System.out.print("Introduce tu Ciudad: ");
-                String ciudad = sc.nextLine();
-                System.out.print("Introduce tu Saludo: ");
-                String saludo = sc.nextLine();
+            //Creamos el objeto a enviar
+            Saludo saludoEnviado = new Saludo(pais, ciudad, saludo);
 
-                Saludo saludoEnviado = new Saludo(pais, ciudad, saludo);
+            //Creamos el flujo de salida
+            OutputStream os = socketLadoCliente.getOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(os);
 
-                os = socketLadoCliente.getOutputStream();
-                objetoSalida = new ObjectOutputStream(os);
+            //Enviamos el objeto al servidor
+            oos.writeObject(saludoEnviado);
 
-                objetoSalida.writeObject(saludoEnviado);
-                if (!condicion.equals("*")) {
-                    is = socketLadoCliente.getInputStream();
-                    objetoEntrada = new ObjectInputStream(is);
-                    System.out.println("Esperando respuesta del servidor:");
-                    Saludo saludoEntrate = (Saludo) objetoEntrada.readObject();
+            System.out.println("Esperando respuesta del servidor...");
 
-                    System.out.println("Recibido del servidor: El país indicado es: " + saludoEntrate.getPais()
-                            + ", la ciudad: " + saludoEntrate.getCiudad() + " y el saludo: " + saludoEntrate.getSaludo());
-                }
-            }
-            if (objetoEntrada != null && is != null) {
-                objetoEntrada.close();
-                is.close();
+            //Creamos el flujo de entrada
+            InputStream is = socketLadoCliente.getInputStream();
+            ObjectInputStream ois = new ObjectInputStream(is);
 
-            }
-            objetoSalida.close();
+            //Leemos el objeto enviado por el cliente
+            Saludo saludoRecibido = (Saludo) ois.readObject(); //Espera a recibir el objeto para leerlo
+            System.out.println("Recibido del servirdor: El país indicado es: " + saludoRecibido.getPais()
+                    + ", la ciudad: " + saludoRecibido.getCiudad() + " y el saludo: " + saludoRecibido.getSaludo());
+
+            ois.close();
+            is.close();
+            oos.close();
             os.close();
             socketLadoCliente.close();
+            sc.close();
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
 }

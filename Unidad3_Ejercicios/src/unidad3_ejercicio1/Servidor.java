@@ -14,43 +14,26 @@ public class Servidor {
 
     public static void main(String[] args) {
         int port = 50000;
-        String condicion = "";
 
         try {
             ServerSocket servidor = new ServerSocket(port);
-            System.out.println("Esperando al cliente: ");
+            System.out.println("Esperando a cliente...");
             Socket socketLadoServidor = servidor.accept();
 
-            InputStream is = null;
-            ObjectInputStream objetoEntrada = null;
-            OutputStream os = null;
-            ObjectOutputStream objetoSalida = null;
+            //Creamos el flujo de entrada
+            InputStream is = socketLadoServidor.getInputStream();
+            ObjectInputStream ois = new ObjectInputStream(is);
 
-            while (!condicion.equals("*")) {
+            //Leemos el objeto enviado por el cliente
+            Saludo saludo = (Saludo) ois.readObject(); //Espera a recibir el objeto para leerlo
+            System.out.println("Saludo recibido: " + saludo);
 
-                is = socketLadoServidor.getInputStream();
-                objetoEntrada = new ObjectInputStream(is);
+            //Creamos el flujo de salida
+            OutputStream os = socketLadoServidor.getOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(os);
 
-                Saludo saludoEntrante = (Saludo) objetoEntrada.readObject();
-                condicion = saludoEntrante.getPais();
-             
-                System.out.println("Saludo recibido: " + saludoEntrante);
-
-                if (!condicion.equals("*")) {
-                    os = socketLadoServidor.getOutputStream();
-                    objetoSalida = new ObjectOutputStream(os);
-                    objetoSalida.writeObject(saludoEntrante);
-                }
-            }
-            
-            if (objetoSalida != null && os!=null) {
-                
-                objetoSalida.close();
-                os.close();
-            }
-            objetoEntrada.close();
-            is.close();
-            socketLadoServidor.close();
+            //Enviamos el objeto al cliente
+            oos.writeObject(saludo);
 
         } catch (IOException ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);

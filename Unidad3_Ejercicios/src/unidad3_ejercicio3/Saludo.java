@@ -1,11 +1,11 @@
-package unidad3_ejercicio1;
+package unidad3_ejercicio3;
 
 import java.io.Serializable;
 
 public class Saludo implements Serializable {
 
-    private String pais;
     private String ciudad;
+    private String pais;
     private String saludo;
 
     public Saludo() {
@@ -13,17 +13,9 @@ public class Saludo implements Serializable {
     }
 
     public Saludo(String pais, String ciudad, String saludo) {
-        this.pais = pais;
         this.ciudad = ciudad;
-        this.saludo = saludo;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
         this.pais = pais;
+        this.saludo = saludo;
     }
 
     public String getCiudad() {
@@ -34,6 +26,14 @@ public class Saludo implements Serializable {
         this.ciudad = ciudad;
     }
 
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
     public String getSaludo() {
         return saludo;
     }
@@ -42,9 +42,16 @@ public class Saludo implements Serializable {
         this.saludo = saludo;
     }
 
+    public boolean contieneAsterisco() {
+        if (ciudad.equals("*") || pais.equals("*") || saludo.equals("*")) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return "Pais=" + pais + ", ciudad=" + ciudad + ", saludo=" + saludo;
+        return "Pais=" + pais + ", Ciudad=" + ciudad + ", Saludo=" + saludo + ".";
     }
 
 }

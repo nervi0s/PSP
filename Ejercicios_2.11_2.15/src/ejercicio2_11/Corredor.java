@@ -5,48 +5,74 @@ import java.util.logging.Logger;
 
 public class Corredor extends Thread {
 
-    private final String nombre;
-    private final int tiempoDemora; //Tiempo que tarda en completar su tarea en milisegundos
+    private final String nombreCorredor;
+    private final int tiempoDemora; //Tiempo que tarda en llegar hasta su siguiente compañero en milisegundos
     private final Testigo testigo;
-    private long tiempoTotal;
+    private Corredor corredorDestino;
+    private long tiempoVueltaCorredor;
 
+    private boolean haRecibidoTestigo;
     private boolean tareaCompletada;
 
-    public Corredor(String nombre, int tiempo, Testigo testigo) {
-        this.nombre = nombre;
-        this.tiempoDemora = tiempo;
+    public Corredor(String nombre, Testigo testigo) {
+        this.nombreCorredor = nombre;
+        this.tiempoDemora = obtenerTiempoDemoraAleatorio();
         this.testigo = testigo;
+    }
+
+    public void setCorredorDestino(Corredor c) {
+        corredorDestino = c;
     }
 
     @Override
     public void run() {
-        correr();
+        while (!tareaCompletada) {
+            correr();
+        }
     }
 
     public void correr() {
-        System.out.printf("Corredor %s empieza a correr.%n", nombre);
-        tiempoTotal = System.currentTimeMillis();
+        tiempoVueltaCorredor = System.currentTimeMillis();
+        usarTestigo();
+        System.out.printf("Corredor %s empieza a correr.%n", nombreCorredor);
         //Simulamos la demora en completar su recorrido hasta poder pasar el testigo
         try {
             sleep(tiempoDemora);
         } catch (InterruptedException ex) {
             Logger.getLogger(Corredor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.printf("Corredor %s ha finalizado de correr y pasa el testigo.%n", nombre);
+
+        if (existeCorredorDestinatario()) {
+            System.out.printf("Corredor %s ha finalizado de correr y pasa el testigo al corredor %s.%n", nombreCorredor, corredorDestino.nombreCorredor);
+            pasarTestigo(corredorDestino);
+        } else {
+            System.out.printf("Corredor %s ha finalizado de correr y ha terminado la carrera.%n", nombreCorredor);
+        }
+
         tareaCompletada = true;
-        tiempoTotal = System.currentTimeMillis() - tiempoTotal;
+        tiempoVueltaCorredor = System.currentTimeMillis() - tiempoVueltaCorredor;
     }
 
-    public String obtenerTiempoTotal() {
-        return tiempoTotal + "";
+    public long obtenerTiempoTotal() {
+        return tiempoVueltaCorredor;
     }
 
-    public void usarTestigo() {
-
+    public void usarTestigo() {//Estable el testigo como ocupado
+        haRecibidoTestigo = true;
+        testigo.cambiarEstado();
     }
 
-    public void pasarTestigo() {
+    public void pasarTestigo(Corredor c) {
+        testigo.cambiarEstado();
+        c.start();
+    }
 
+    public boolean existeCorredorDestinatario() {
+        return (corredorDestino != null);
+    }
+
+    public int obtenerTiempoDemoraAleatorio() {
+        return 1000 * ((int) (Math.random() * (11 - 9 + 1)) + 9);
     }
 
 }

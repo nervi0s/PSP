@@ -24,6 +24,6 @@ public class Carrera {
             Logger.getLogger(Carrera.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.printf("El tiempo total de la carreta ha sido: %d ", c1.obtenerTiempoTotal() + c2.obtenerTiempoTotal() + c3.obtenerTiempoTotal());
+        System.out.printf("El tiempo total de la carreta ha sido: %d%n", c1.obtenerTiempoParcial() + c2.obtenerTiempoParcial() + c3.obtenerTiempoParcial());
     }
 }

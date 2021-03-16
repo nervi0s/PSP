@@ -43,17 +43,18 @@ public class Corredor extends Thread {
         }
 
         if (existeCorredorDestinatario()) {
-            System.out.printf("Corredor %s ha finalizado de correr y pasa el testigo al corredor %s.%n", nombreCorredor, corredorDestino.nombreCorredor);
+            tiempoVueltaCorredor = System.currentTimeMillis() - tiempoVueltaCorredor;
+            System.out.printf("Corredor %s ha finalizado de correr en  un tiempo de %d y pasa el testigo al corredor %s.%n", nombreCorredor, obtenerTiempoParcial(), corredorDestino.nombreCorredor);
             pasarTestigo(corredorDestino);
         } else {
-            System.out.printf("Corredor %s ha finalizado de correr y ha terminado la carrera.%n", nombreCorredor);
+            tiempoVueltaCorredor = System.currentTimeMillis() - tiempoVueltaCorredor;
+            System.out.printf("Corredor %s ha finalizado de correr y ha terminado la carrera en un tiempo de %d.%n", nombreCorredor, obtenerTiempoParcial());
         }
 
         tareaCompletada = true;
-        tiempoVueltaCorredor = System.currentTimeMillis() - tiempoVueltaCorredor;
     }
 
-    public long obtenerTiempoTotal() {
+    public long obtenerTiempoParcial() {
         return tiempoVueltaCorredor;
     }
 

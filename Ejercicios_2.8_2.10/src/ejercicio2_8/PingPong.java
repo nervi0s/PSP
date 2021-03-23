@@ -2,8 +2,8 @@ package ejercicio2_8;
 
 public class PingPong extends Thread {
 
-    private static volatile boolean flag = true;
     private final String nombre;
+    public boolean state;
 
     public PingPong(String nombre) {
         this.nombre = nombre;
@@ -12,21 +12,19 @@ public class PingPong extends Thread {
     @Override
     public void run() {
         while (true) {
-            if (nombre.equals("ping") && flag) {
-                System.out.println(showPing());
-                flag = false;
-            } else if (nombre.equals("pong") && !flag) {
-                System.out.println(showPong());
-                flag = true;
-            }
+            showMessage();
         }
     }
 
-    public String showPing() {
-        return "PING";
-    }
-
-    public String showPong() {
-        return "PONG";
+    public void showMessage() {
+        synchronized (this) {
+            if (state) {
+                System.out.println("TIC");
+                state = !state;
+            } else {
+                System.out.println("tac");
+                state = !state;
+            }
+        }
     }
 }
